@@ -1,140 +1,73 @@
-import React from "react";
+"use client";
+import React, { useEffect, useRef } from "react";
 import Button from "./Button";
-
-const history = [
-  {
-    id: 1,
-    title: "Chat 1",
-  },
-  {
-    id: 2,
-    title: "Chat 2",
-  },
-  {
-    id: 3,
-    title: "Chat 3",
-  },
-  {
-    id: 4,
-    title: "Chat 4",
-  },
-  {
-    id: 5,
-    title: "Chat 5",
-  },
-  {
-    id: 6,
-    title: "Chat 6",
-  },
-  {
-    id: 7,
-    title: "Chat 7",
-  },
-  {
-    id: 8,
-    title: "Chat 8",
-  },
-  {
-    id: 9,
-    title: "Chat 9",
-  },
-  {
-    id: 10,
-    title: "Chat 10",
-  },
-  {
-    id: 11,
-    title: "Chat 11",
-  },
-  {
-    id: 12,
-    title: "Chat 12",
-  },
-  {
-    id: 13,
-    title: "Chat 13",
-  },
-  {
-    id: 14,
-    title: "Chat 14",
-  },
-  {
-    id: 15,
-    title: "Chat 15",
-  },
-  {
-    id: 16,
-    title: "Chat 16",
-  },
-  {
-    id: 17,
-    title: "Chat 17",
-  },
-  {
-    id: 18,
-    title: "Chat 18",
-  },
-  {
-    id: 19,
-    title: "Chat 19",
-  },
-  {
-    id: 20,
-    title: "Chat 20",
-  },
-  {
-    id: 21,
-    title: "Chat 21",
-  },
-  {
-    id: 22,
-    title: "Chat 22",
-  },
-  {
-    id: 23,
-    title: "Chat 23",
-  },
-  {
-    id: 24,
-    title: "Chat 24",
-  },
-  {
-    id: 25,
-    title: "Chat 25",
-  },
-  {
-    id: 26,
-    title: "Chat 26",
-  },
-  {
-    id: 27,
-    title: "Chat 27",
-  },
-  {
-    id: 28,
-    title: "Chat 28",
-  },
-  {
-    id: 29,
-    title: "Chat 29",
-  },
-];
+import { history } from "@/lib/db.ts";
+import { useRouter } from "next/navigation";
+import ChatIcon from "./icons/ChatIcon";
+import ChevLeft from "./icons/ChevLeft";
+import ChevRight from "./icons/ChevRight";
+import LoginIcon from "./icons/LoginIcon";
 
 function Sidebar() {
+  const [toggle, setToggle] = React.useState<boolean>(false);
+  const router = useRouter();
+  const barRef = useRef<HTMLDivElement>(null);
+  const handleChatOpen = (id: string) => {
+    return () => {
+      router.push(`/chat/${id}`);
+    };
+  };
+  useEffect(() => {
+    const handleResize = () => {
+      if (toggle) {
+        // change width of side bar using barRef to 0
+        barRef.current!.style.width = "0px";
+      } else {
+        // change width to fit content
+        barRef.current!.style.width = "200px";
+      }
+    };
+    setTimeout(handleResize, toggle ? 500 : 0);
+  }, [toggle]);
   return (
-    <div className="w-[200px]  h-[100dvh] bg-stone-600 shadow-md p-2 px-4 flex flex-col space-y-2">
-      <Button>New Chat</Button>
-      <hr/>
-      <div className="grow h-max-full h-0 flex flex-col overflow-hidden">
-        <h1 className="text-xl font-semibold">Chats</h1>
-        <div className="flex flex-col space-y-2 overflow-scroll max-w-full">
-          {history.map((chat) => (
-            <Button key={chat.id}>{chat.title}</Button>
-          ))}
+    <div
+      className={
+        "relative text-[#9E9E9E] max-w-fit h-[100dvh] bg-inherit border-r-[1px] border-r-[#454545] border-solid " +
+        (toggle
+          ? "transition ease-in-out delay-100 duration-400 -translate-x-[100%] "
+          : "transition ease-in-out delay-100 duration-400 translate-x-0")
+      }
+    >
+      <div
+        ref={barRef}
+        className={
+          "flex flex-col space-y-2 h-full w-[200px] py-2 px-4 overflow-hidden"
+        }
+      >
+        <Button onClick={() => router.push("/")} icon={<ChatIcon />}>
+          New Chat
+        </Button>
+        <hr className="border-[#454545]" />
+        <div className="grow h-max-full h-0 flex flex-col overflow-hidden">
+          <h1 className="text-xl font-semibold text-center shadow-sm py-2">History</h1>
+          <div className="flex flex-col space-y-2 overflow-scroll max-w-full pr-2">
+            {history.map((chat: any) => (
+              <Button key={chat.id} onClick={handleChatOpen(chat.id)}>
+                {chat.title}
+              </Button>
+            ))}
+          </div>
         </div>
+        <hr className="border-[#454545]" />
+        <Button icon={<LoginIcon/>}>Login</Button>
       </div>
-      <hr/>
-      <Button>Login</Button>
+
+      <button
+        onClick={(e) => setToggle((prev) => !prev)}
+        className="absolute left-[100%] top-0 h-full px-2 hover:bg-black hover:bg-opacity-20 opacity-60 hover:transition ease-in-out duration-250 hover:opacity-100 transition hover:animate-pulse"
+      >
+        {toggle ? <ChevRight /> : <ChevLeft />}
+      </button>
     </div>
   );
 }

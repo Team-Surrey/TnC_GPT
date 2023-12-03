@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* TODO add light theme */
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -18,5 +20,6 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: rgb(142, 184, 243); /* fallback for old browsers */
+  background: #1E1E1E; /* fallback for old browsers */
 }
+
