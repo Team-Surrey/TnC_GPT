@@ -93,7 +93,7 @@ function Sidebar() {
                   key={chat.id}
                   onClick={handleChatOpen(chat.id)}
                 >
-                  {chat.messages[0].content.slice(0, 20)}
+                  {chat.messages[0].content.slice(0, 17)}
                 </Button>
               ))
             }

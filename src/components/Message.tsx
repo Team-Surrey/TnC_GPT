@@ -5,9 +5,10 @@ import SlowResponse from "./SlowResponse";
 interface Props {
   message: Partial<Message>;
   loading?: boolean;
+  slow?: boolean;
 }
 
-export default function Message({ message, loading }: Props) {
+export default function Message({ message, loading, slow=false }: Props) {
   return (
     <div
       className={
@@ -24,7 +25,8 @@ export default function Message({ message, loading }: Props) {
         ) : message.author == MessageAuthor.user ? (
           message.content
         ) : (
-          <SlowResponse speed={100} text={message.content!} />
+          slow ? <SlowResponse speed={100} text={message.content!} /> : 
+          <span>{message.content}</span>
         )}
       </p>
     </div>

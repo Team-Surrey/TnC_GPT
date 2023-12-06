@@ -86,7 +86,7 @@ export default function Chat({
     await updateDoc(doc(db, "chatHistory", chatId), {
       messages: arrayUnion(response),
     });
-
+    response.slow = true
     setMessages((prev) => [...prev, response]);
     setLoading(false);
     if (path == "/") {
@@ -124,12 +124,13 @@ export default function Chat({
       </div>
       <div className="grow space-y-2 py-5 h-0 overflow-scroll scroll-smooth max-w-full ">
         {messages.map((message, i) => (
-          <Message key={i} message={message} />
+          <Message key={i} message={message} slow={message.slow} />
         ))}
         {loading && (
           <Message
             message={{ author: MessageAuthor.bot, content: "" }}
             loading
+            
           />
         )}
       </div>
