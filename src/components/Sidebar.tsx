@@ -35,13 +35,12 @@ function Sidebar() {
       router.push(`/chat/${id}`);
     };
   };
+  
   useEffect(() => {
     const handleResize = () => {
       if (toggle) {
-        // change width of side bar using barRef to 0
         barRef.current!.style.width = "0px";
       } else {
-        // change width to fit content
         barRef.current!.style.width = "200px";
       }
     };
@@ -57,7 +56,6 @@ function Sidebar() {
       querySnapshot.forEach((doc:any) => {
         history.push({id:doc.id,...doc.data()})
       });
-      console.log(history)
       setChats(history)
     }
     getChats()

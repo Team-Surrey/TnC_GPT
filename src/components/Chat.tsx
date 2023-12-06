@@ -9,6 +9,8 @@ import { useQuery } from "react-query";
 import SendIcon from "./icons/SendIcon";
 import useFocus from '@/hooks/useFocus';
 import { useRouter, usePathname } from "next/navigation";
+import getResponse from "@/lib/getResponse";
+
 
 
 const replies = [
@@ -78,9 +80,22 @@ export default function Chat({
 
   const handleResponse = async () => {
     setLoading(true);
+    
+    const res = await fetch(`${process.env.NEXT_PUBLIC_MODEL_API_URL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        input: {
+          text: messages[messages.length - 1].content
+        },
+      }),
+    }).then((res) => res.json()).catch((err)=>console.log(err))
+
     const response: Message = {
       author: MessageAuthor.bot,
-      content: replies[Math.floor(Math.random() * replies.length)],
+      content: res? res.output.content : "Sorry, There appears to be an issue with the server. Please try again later.",
       timestamp: new Date(),
     };
     await updateDoc(doc(db, "chatHistory", chatId), {
