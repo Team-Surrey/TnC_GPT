@@ -1,13 +1,11 @@
-import React from 'react'
+import React from "react";
 
 interface Props {
-
-  speed: number,
-  text: string
-  
+  speed: number;
+  text: string;
 }
 
-function SlowResponse({speed, text}: Props) {
+function SlowResponse({ speed, text }: Props) {
   const [placeholder, setPlaceholder] = React.useState(text[0]);
   const [isTyping, setIsTyping] = React.useState(true);
   const index = React.useRef(0);
@@ -23,10 +21,15 @@ function SlowResponse({speed, text}: Props) {
       return () => {
         setIsTyping(false);
         clearInterval(addChar);
-      }
+      };
     }
   }, [placeholder, speed, text]);
-  return <span>{placeholder}{isTyping?`|`:""}</span>
+  return (
+    <span>
+      {placeholder}
+      {isTyping ? `|` : ""}
+    </span>
+  );
 }
 
-export default SlowResponse
+export default SlowResponse;

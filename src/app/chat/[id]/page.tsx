@@ -1,22 +1,15 @@
 "use client"
 import Chat from '@/components/Chat'
 import React, { useEffect, useState } from 'react'
-import { history } from '@/lib/db.ts'
+import { doc, getDoc } from "firebase/firestore";
+import { db } from '@/lib/firebase';
+
 
 
 function Page({params}:{params: {id: string}}) {
-  const {id} = params
-  const [messages, setMessages] = useState<Array<Message>>([]);
-  useEffect(() => {
-    console.log(id)
-    if (id) {
-      const chat = history.filter((chat:any) => chat.id == id)
-      console.log(chat)
-      setMessages(chat[0]?.history!)
-    }
-  }, [id])    
+  const {id} = params  
   return (
-    <Chat messageHistory={messages}/>
+    <Chat chatId={id}/>
   )
 }
 

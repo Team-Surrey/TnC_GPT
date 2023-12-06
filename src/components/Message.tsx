@@ -12,9 +12,7 @@ export default function Message({ message, loading }: Props) {
     <div
       className={
         "text-white flex flex-row justify-start p-2 space-x-2 rounded-lg w-[inherit] " +
-        (message.author == MessageAuthor.user
-          ? "bg-[#2D2D2D]"
-          : "")
+        (message.author == MessageAuthor.user ? "bg-[#2D2D2D]" : "")
       }
     >
       <h1 className="bg-[#454545] text-xl rounded-lg p-1 h-fit">

@@ -1,17 +1,15 @@
 "use client";
 import Message from "@/components/Message";
+import { useAuth } from "@/context/AuthContext";
+import { db } from "@/lib/firebase";
 import { MessageAuthor } from "@/types/enums";
+import { addDoc, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
+import SendIcon from "./icons/SendIcon";
+import useFocus from '@/hooks/useFocus';
+import { useRouter, usePathname } from "next/navigation";
 
-const useFocus = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const setFocus = () => {
-    ref.current?.focus();
-  };
-
-  return [ref, setFocus];
-};
 
 const replies = [
   "As I see it, yes",
@@ -36,46 +34,91 @@ const replies = [
   "Very doubtful",
 ];
 
+enum ModeEnum {standard="standard",summary="summarise"}
+
 export default function Chat({
-  messageHistory,
+  chatId,
 }: {
-  messageHistory?: Array<Message>;
+  chatId?: any
 }) {
-  const [messages, setMessages] = useState<Array<Message>>(
-    messageHistory || []
-  );
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [chatRef, setChatRefFocus] = useFocus();
+  const [messages, setMessages] = useState<Array<Message>>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  useEffect(() => {
-    setMessages(messageHistory || []);
-  }, [messageHistory]);
-  const handleMessage = (e: any) => {
+  const [chatRef, setChatRefFocus] = useFocus();
+  const {state} = useAuth();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [mode, setMode] = useState<ModeEnum>(ModeEnum.standard);
+  const router = useRouter();
+  const path = usePathname();
+
+  const handleMessage = async (e: any) => {
     e.preventDefault();
     if (!inputRef?.current?.value) return;
     const message: Message = {
-      id: parseInt(Math.random().toString(36)),
       author: MessageAuthor.user,
       content: inputRef?.current.value,
+      timestamp: new Date(),
+
     };
+    if (chatId){
+      await updateDoc(doc(db, "chatHistory", chatId), {
+        messages: arrayUnion(message),
+    });
+    } else {
+       await addDoc(collection(db, "chatHistory"), {
+        messages: [message],
+        userId: state.user?.uid,
+
+      }).then((res)=>{chatId=res.id});
+      
+    }
     setMessages((prev) => [...prev, message]);
     inputRef.current.value = "";
     return setTimeout(handleResponse, 100);
   };
+
   const handleResponse = async () => {
     setLoading(true);
-
     const response: Message = {
-      id: parseInt(Math.random().toString(36)),
       author: MessageAuthor.bot,
       content: replies[Math.floor(Math.random() * replies.length)],
+      timestamp: new Date(),
     };
+    await updateDoc(doc(db, "chatHistory", chatId), {
+      messages: arrayUnion(response),
+    });
+
     setMessages((prev) => [...prev, response]);
     setLoading(false);
+    if (path == "/") {
+      router.replace(`/chat/${chatId}`)
+    }
   };
 
+  useEffect(() => {
+    async function getDataOrCreate() {
+      if (!chatId) return;
+      const docRef = doc(db, "chatHistory", chatId);
+
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setMessages(docSnap.data()?.messages);
+      } else {
+        const res = await addDoc(collection(db, "chatHistory"), {
+          messages: [],
+          userId: state.user?.uid,
+        });
+        router.push(`/chat/${res.id}`);
+      }
+    }
+    getDataOrCreate();
+  }, [chatId]);
+
   return (
-    <div className="h-full flex flex-col justify-between p-10 max-w-full overflow-hidden">
+    <div className="h-full flex flex-col justify-between p-10 pt-5 max-w-full overflow-hidden">
+      <div className="flex flex-row rounded-lg w-fit text-sm mb-5 bg-[#2D2D2D] font-semibold">
+        <button className={"p-2 h-full rounded-l-md" + (mode == ModeEnum.standard? " transition ease-in duration-250 bg-[#0085FF] text-[#212121]":" transition ease-out duration-250 shadow-inner")} onClick={()=>setMode(ModeEnum.standard)}>Standard</button>
+        <button className={"p-2 h-full rounded-r-md" + (mode == ModeEnum.summary ? " transition ease-in duration-250 bg-[#0085FF] text-[#212121]":" transition ease-out duration-250 shadow-inner")} onClick={()=>setMode(ModeEnum.summary)}>Summarise</button>
+      </div>
       <div>
         <h1 className="text-4xl font-semibold">TnC Gpt</h1>
       </div>
@@ -102,7 +145,7 @@ export default function Chat({
         <input
           ref={inputRef}
           type="text"
-          placeholder="What do you desire to know?"
+          placeholder={mode==ModeEnum.standard?"What do you desire to know?":"Enter link of the Terms and condions"}
           className="bg-inherit h-auto w-full focus:outline-none text-stone-200 py-2 px-4"
           onFocus={(e) => {
             e.preventDefault;
@@ -112,20 +155,7 @@ export default function Chat({
           className="bg-[#0085FF] text-white rounded-lg rounded-l-none px-3"
           onClick={handleMessage}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-            />
-          </svg>
+          <SendIcon/>
         </button>
       </div>
     </div>
