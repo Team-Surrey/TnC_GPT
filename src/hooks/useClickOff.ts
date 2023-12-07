@@ -7,7 +7,6 @@ function useClickOff(ref: any | any[], callback: () => void) {
       if (Array.isArray(ref)) {
         let left = true;
         for (let i = 0; i < ref.length; i++) {
-            console.log("ref[i]", ref[i])
           if (ref[i].current && ref[i].current.contains(event.target)) {
             left = false;
           }
@@ -22,7 +21,7 @@ function useClickOff(ref: any | any[], callback: () => void) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [ref]);
+  }, [ref,callback]);
 }
 
 export default useClickOff;

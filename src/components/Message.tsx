@@ -1,5 +1,4 @@
 import { MessageAuthor } from "@/types/enums";
-import React from "react";
 import SlowResponse from "./SlowResponse";
 
 interface Props {
@@ -12,8 +11,8 @@ export default function Message({ message, loading, slow=false }: Props) {
   return (
     <div
       className={
-        "text-white flex flex-row justify-start p-2 space-x-2 rounded-lg w-[inherit] " +
-        (message.author == MessageAuthor.user ? "bg-[#2D2D2D]" : "")
+        " flex flex-row justify-start p-2 space-x-2 rounded-lg w-[inherit] " +
+        (message.author == MessageAuthor.user ? "bg-theme-secondary" : "")
       }
     >
       <h1 className="bg-[#454545] text-xl rounded-lg p-1 h-fit">

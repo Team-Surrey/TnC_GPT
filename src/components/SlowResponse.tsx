@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface Props {
   speed: number;
@@ -6,11 +6,11 @@ interface Props {
 }
 
 function SlowResponse({ speed, text }: Props) {
-  const [placeholder, setPlaceholder] = React.useState(text[0]);
-  const [isTyping, setIsTyping] = React.useState(true);
-  const index = React.useRef(0);
+  const [placeholder, setPlaceholder] = useState(text[0]);
+  const [isTyping, setIsTyping] = useState(true);
+  const index = useRef(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     function tick() {
       index.current++;
       setPlaceholder((prev: string) => prev + text[index.current]);

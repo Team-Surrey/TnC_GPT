@@ -7,7 +7,7 @@ import ChatIcon from "./icons/ChatIcon";
 import ChevLeft from "./icons/ChevLeft";
 import ChevRight from "./icons/ChevRight";
 import LoginIcon from "./icons/LoginIcon";
-import { app, auth, db } from "@/lib/firebase.ts";
+import { db } from "@/lib/firebase.ts";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useAuth } from "@/context/AuthContext";
 import LogoutIcon from "./icons/LogoutIcon";
@@ -15,6 +15,8 @@ import useClickOff from "@/hooks/useClickOff";
 import AnalysisIcon from "./icons/AnalysisIcon";
 import UserIcon from "./icons/UserIcon";
 import { query, collection, where, getDocs } from "firebase/firestore";
+import useColorScheme from "@/hooks/useColorScheme";
+import SunIcon from "./icons/SunIcon";
 
 const provider = new GoogleAuthProvider();
 
@@ -27,6 +29,7 @@ function Sidebar() {
   const userButtonRef = useRef<HTMLButtonElement>(null);
   const { state, signinWithGoogle, signOut } = useAuth();
   const [chats,setChats] = useState<Array<Chat>>([]);
+  const [theme, toggleTheme] = useColorScheme();
 
   useClickOff([userOptionsRef, userButtonRef], () => setToggleOptions(false));
 
@@ -35,7 +38,7 @@ function Sidebar() {
       router.push(`/chat/${id}`);
     };
   };
-  
+
   useEffect(() => {
     const handleResize = () => {
       if (toggle) {
@@ -64,7 +67,7 @@ function Sidebar() {
   return (
     <div
       className={
-        "relative text-[#9E9E9E] max-w-fit h-[100dvh] bg-inherit border-r-[1px] border-r-[#454545] border-solid " +
+        "relative max-w-fit h-[100dvh] bg-inherit border-r-[1px] border-r-[#454545] border-solid " +
         (toggle
           ? "transition ease-in-out delay-100 duration-400 -translate-x-[100%] "
           : "transition ease-in-out delay-100 duration-400 translate-x-0")
@@ -76,6 +79,7 @@ function Sidebar() {
           "flex flex-col space-y-2 h-full w-[200px] py-2 px-4 overflow-hidden"
         }
       >
+        <Button onClick={toggleTheme} icon={<SunIcon />}>{theme =="light" ? "Light Mode" : "Dark Mode"}</Button>
         <Button onClick={() => router.push("/")} icon={<ChatIcon />}>
           New Chat
         </Button>
@@ -86,7 +90,7 @@ function Sidebar() {
           </h1>
           <div className="flex flex-col space-y-2 overflow-scroll max-w-full pr-2">
             {
-              chats?.map((chat:Chat,i:number) => (
+              chats.length > 0 && chats?.map((chat:Chat) => (
                 <Button
                   key={chat.id}
                   onClick={handleChatOpen(chat.id)}
@@ -104,7 +108,7 @@ function Sidebar() {
               <div
                 ref={userOptionsRef}
                 className={
-                  "absolute bottom-[calc(100%+2px)] p-2 w-full bg-[#2f2f2f] rounded-md " +
+                  "absolute bottom-[calc(100%+2px)] p-2 w-full bg-theme-secondary rounded-md " +
                   (toggleOptions ? " transition ease-in duration-300" : "hidden")
                 }
               >

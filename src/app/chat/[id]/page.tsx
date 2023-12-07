@@ -1,10 +1,6 @@
 "use client"
 import Chat from '@/components/Chat'
-import React, { useEffect, useState } from 'react'
-import { doc, getDoc } from "firebase/firestore";
-import { db } from '@/lib/firebase';
-
-
+import React from "react";
 
 function Page({params}:{params: {id: string}}) {
   const {id} = params  

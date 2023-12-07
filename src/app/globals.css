@@ -5,21 +5,38 @@
 
 /* TODO add light theme */
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  
+  --foreground-light-rgb: 42, 42, 42;
+  --background-light-rgb: 255, 255, 255;
+  --secondary-light-rgb: 200, 200, 200;
+
+
+  --foreground-dark-rgb: 158, 158, 158;
+  --background-dark-rgb: 30, 30, 30 ;
+  --secondary-dark-rgb: 45 45 45;
+  
+  --foreground-rgb: var(--foreground-light-rgb);
+  --background-rgb: var(--background-light-rgb);
+  --secondary-rgb: var(--secondary-light-rgb);
+
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+[data-theme="dark"] {
+  --foreground-rgb: var(--foreground-dark-rgb);
+  --background-rgb: var(--background-dark-rgb);
+  --secondary-rgb: var(--secondary-dark-rgb);
 }
+
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: #1E1E1E; /* fallback for old browsers */
+  color: rgb(var(--foreground-rgb)) ;
+  background: rgb(var(--background-rgb)) ; 
+}
+.bg-theme-secondary {
+  background: rgb(var(--secondary-rgb)) ; 
 }
 
+*::placeholder {
+  color: rgb(var(--foreground-rgb)) !important;
+  opacity: 0.4 !important;
+}
