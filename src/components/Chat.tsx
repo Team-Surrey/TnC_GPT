@@ -1,4 +1,4 @@
-"use client";
+
 import Message from "@/components/Message";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
@@ -60,7 +60,7 @@ export default function Chat({ chatId }: { chatId?: any }) {
   const handleResponse = async () => {
     setLoading(true);
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_MODEL_API_URL}`, {
+    const res = await fetch("/api/response", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +77,7 @@ export default function Chat({ chatId }: { chatId?: any }) {
     const response: Message = {
       author: MessageAuthor.bot,
       content: res
-        ? res.output.content
+        ? res
         : "Sorry, There appears to be an issue with the server. Please try again later.",
       timestamp: new Date(),
     };
