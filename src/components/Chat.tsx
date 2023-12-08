@@ -17,6 +17,11 @@ import SendIcon from "./icons/SendIcon";
 import useFocus from "@/hooks/useFocus";
 import { useRouter, usePathname } from "next/navigation";
 
+
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import style from './styles/markdown.module.css';
+
 enum ModeEnum {
   standard = "standard",
   summary = "summarise",
@@ -84,7 +89,9 @@ export default function Chat({ chatId }: { chatId?: any }) {
     await updateDoc(doc(db, "chatHistory", chatId), {
       messages: arrayUnion(response),
     });
+
     response.slow = true;
+
     setMessages((prev) => [...prev, response]);
     setLoading(false);
     if (path == "/") {
@@ -138,11 +145,16 @@ export default function Chat({ chatId }: { chatId?: any }) {
         </button>
       </div>
       <div>
-        <h1 className="text-4xl font-semibold">TnC Gpt</h1>
+        <h1 className="text-4xl font-semibold">Term Aware Guard</h1>
       </div>
       <div className="grow space-y-2 py-5 h-0 overflow-scroll scroll-smooth max-w-full ">
+        
         {messages.map((message, i) => (
-          <Message key={i} message={message} slow={message.slow} />
+          console.log(message.content),
+          <Message key={i}  message={message}  slow={message.slow}>
+          <Markdown remarkPlugins={[remarkGfm]} className={style.reactMarkDown}>
+              {message.content as string}</Markdown>
+              </Message>
         ))}
         {loading && (
           <Message

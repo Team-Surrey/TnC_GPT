@@ -4,7 +4,7 @@ declare type Message = {
   author: EnumType;
   content: string;
   timestamp: Date;
-  slow?: boolean;
+  slow?: boolean
 };
 
 declare type Chat = {
