@@ -8,9 +8,9 @@ import { RetrievalQAChain } from "langchain/chains";
 import { CharacterTextSplitter } from "langchain/text_splitter";
 import { readFileSync } from "fs";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-
-
-
+import { Chroma } from "langchain/vectorstores/chroma";
+import { GoogleVertexAIEmbeddings } from "langchain/embeddings/googlevertexai";
+//import { VectorstoreIndexCreator } from "langchain/indexes";
 
 export async function POST(req: any) {
   const res = await req.json();
@@ -30,7 +30,7 @@ async function openAiPredict(prompt: string) {
 
   const splitter = new CharacterTextSplitter({
     separator: " ",
-    chunkSize: 150,
+    chunkSize: 1000,
     chunkOverlap: 20,
   });
     const loader = new ApifyDatasetLoader( "IthgZdVXyQvgoj6lR", {
@@ -43,8 +43,8 @@ async function openAiPredict(prompt: string) {
         }),
     })
     const docs = await splitter.splitDocuments(await loader.load());
-    let vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
-
+    let vectorStore = await HNSWLib.fromDocuments(docs, new GoogleVertexAIEmbeddings());
+    console.log(vectorStore)
     const chain = RetrievalQAChain.fromLLM(
       new GoogleVertexAI({
         authOptions: {
@@ -55,11 +55,11 @@ async function openAiPredict(prompt: string) {
         topK: 40,
         model: "text-bison@002",
       }),
-      vectorStore.asRetriever(5),
+      vectorStore.asRetriever(4),
       {
         returnSourceDocuments: true,
       },
-    )
+    );
 
     const temp2 = `
     Summarize the terms and conditions for signing up for the company ${prompt} in the format:
