@@ -31,7 +31,7 @@ export default function Message({ message, loading, slow = false }: Props) {
           <SlowResponse speed={8} text={message.content!} />
         ) : (
           <Markdown remarkPlugins={[remarkGfm]} className={style.reactMarkDown}>
-            {message.content}
+            {message.content as string}
           </Markdown>
         )}
       </p>

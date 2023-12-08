@@ -1,0 +1,41 @@
+[debug] [2023-12-08T13:28:37.962Z] ----------------------------------------------------------------------
+[debug] [2023-12-08T13:28:37.964Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\gracj\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-12-08T13:28:37.964Z] CLI Version:   12.9.1
+[debug] [2023-12-08T13:28:37.964Z] Platform:      win32
+[debug] [2023-12-08T13:28:37.964Z] Node Version:  v18.18.2
+[debug] [2023-12-08T13:28:37.965Z] Time:          Fri Dec 08 2023 13:28:37 GMT+0000 (Greenwich Mean Time)
+[debug] [2023-12-08T13:28:37.965Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-12-08T13:28:38.031Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-12-08T13:28:38.032Z] > authorizing via signed-in user (gracjanwojciechowski2002@gmail.com)
+[debug] [2023-12-08T13:28:38.032Z] [iam] checking project term-aware-guard for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-12-08T13:28:38.034Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/term-aware-guard:testIamPermissions [none]
+[debug] [2023-12-08T13:28:38.034Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/term-aware-guard:testIamPermissions x-goog-quota-user=projects/term-aware-guard
+[debug] [2023-12-08T13:28:38.035Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/term-aware-guard:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-12-08T13:28:38.778Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/term-aware-guard:testIamPermissions 200
+[debug] [2023-12-08T13:28:38.778Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/term-aware-guard:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-12-08T13:28:38.780Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/term-aware-guard [none]
+[debug] [2023-12-08T13:28:39.077Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/term-aware-guard 200
+[debug] [2023-12-08T13:28:39.077Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/term-aware-guard {"projectId":"term-aware-guard","projectNumber":"107164564073","displayName":"Term Aware Guard","name":"projects/term-aware-guard","resources":{"hostingSite":"term-aware-guard"},"state":"ACTIVE","etag":"1_e26a5858-f429-43fa-900a-ef9523160a24"}
+[debug] [2023-12-08T13:28:43.003Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/term-aware-guard/sites pageToken=&pageSize=10
+[debug] [2023-12-08T13:28:44.127Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/term-aware-guard/sites 200
+[debug] [2023-12-08T13:28:44.127Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/term-aware-guard/sites {"sites":[{"name":"projects/term-aware-guard/sites/term-aware-guard","defaultUrl":"https://term-aware-guard.web.app","appId":"1:107164564073:web:86709636c6085c7361c0f8","type":"DEFAULT_SITE"}]}
+[debug] [2023-12-08T13:28:44.128Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:107164564073:web:86709636c6085c7361c0f8/config [none]
+[debug] [2023-12-08T13:28:44.908Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:107164564073:web:86709636c6085c7361c0f8/config 200
+[debug] [2023-12-08T13:28:44.908Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:107164564073:web:86709636c6085c7361c0f8/config {"projectId":"term-aware-guard","appId":"1:107164564073:web:86709636c6085c7361c0f8","storageBucket":"term-aware-guard.appspot.com","apiKey":"AIzaSyD_bDrMTYlGqvX9Ir62IsD9dzgLVgPa61Y","authDomain":"term-aware-guard.firebaseapp.com","messagingSenderId":"107164564073"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[info]    ▲ Next.js 14.0.3
+
+[info]    - Environments: .env.local
+
+   Creating an optimized production build ...
+

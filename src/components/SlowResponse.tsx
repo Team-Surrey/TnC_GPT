@@ -29,7 +29,7 @@ function SlowResponse({ speed, text }: Props) {
   return (
     <span>
       <Markdown remarkPlugins={[remarkGfm]} className={style.reactMarkDown}>
-          {placeholder + (isTyping ? "|" : "")}
+          {(placeholder + (isTyping ? "|" : "")) as string}
       </Markdown>
     </span>
   );

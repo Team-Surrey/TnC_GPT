@@ -18,10 +18,6 @@ import useFocus from "@/hooks/useFocus";
 import { useRouter, usePathname } from "next/navigation";
 
 
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import style from './styles/markdown.module.css';
-
 enum ModeEnum {
   standard = "standard",
   summary = "summarise",
@@ -59,20 +55,20 @@ export default function Chat({ chatId }: { chatId?: any }) {
     }
     setMessages((prev) => [...prev, message]);
     inputRef.current.value = "";
-    return setTimeout(handleResponse, 100);
+    return setTimeout(()=>handleResponse(message.content), 100);
   };
 
-  const handleResponse = async () => {
+  const handleResponse = async (question:any) => {
+    console.log(messages);
     setLoading(true);
-
-    const res = await fetch("/api/response", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_MODEL_API_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         input: {
-          text: messages[messages.length - 1].content,
+          text: question
         },
       }),
     })
@@ -82,7 +78,7 @@ export default function Chat({ chatId }: { chatId?: any }) {
     const response: Message = {
       author: MessageAuthor.bot,
       content: res
-        ? res
+        ? res.output.content
         : "Sorry, There appears to be an issue with the server. Please try again later.",
       timestamp: new Date(),
     };
@@ -150,10 +146,7 @@ export default function Chat({ chatId }: { chatId?: any }) {
       <div className="grow space-y-2 py-5 h-0 overflow-scroll scroll-smooth max-w-full ">
         
         {messages.map((message, i) => (
-          console.log(message.content),
           <Message key={i}  message={message}  slow={message.slow}/>
-          
-
         ))}
         {loading && (
           <Message
