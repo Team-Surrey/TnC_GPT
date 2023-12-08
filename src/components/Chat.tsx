@@ -151,10 +151,9 @@ export default function Chat({ chatId }: { chatId?: any }) {
         
         {messages.map((message, i) => (
           console.log(message.content),
-          <Message key={i}  message={message}  slow={message.slow}>
-          <Markdown remarkPlugins={[remarkGfm]} className={style.reactMarkDown}>
-              {message.content as string}</Markdown>
-              </Message>
+          <Message key={i}  message={message}  slow={message.slow}/>
+          
+
         ))}
         {loading && (
           <Message

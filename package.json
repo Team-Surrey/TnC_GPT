@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "apify": "^3.1.14",
     "firebase": "^10.7.0",
     "google-auth-library": "^8.9.0",
     "langchain": "^0.0.203",

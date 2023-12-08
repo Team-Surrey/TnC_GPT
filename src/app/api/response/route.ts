@@ -11,6 +11,7 @@ import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 
 
 
+
 export async function POST(req: any) {
   const res = await req.json();
   const text = res.input.text;
@@ -29,7 +30,7 @@ async function openAiPredict(prompt: string) {
 
   const splitter = new CharacterTextSplitter({
     separator: " ",
-    chunkSize: 100,
+    chunkSize: 150,
     chunkOverlap: 20,
   });
     const loader = new ApifyDatasetLoader( "IthgZdVXyQvgoj6lR", {

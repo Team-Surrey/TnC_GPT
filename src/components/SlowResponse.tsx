@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import style from "./styles/markdown.module.css";
 interface Props {
   speed: number;
   text: string;
@@ -26,8 +28,9 @@ function SlowResponse({ speed, text }: Props) {
   }, [placeholder, speed, text]);
   return (
     <span>
-      {placeholder}
-      {isTyping ? `|` : ""}
+      <Markdown remarkPlugins={[remarkGfm]} className={style.reactMarkDown}>
+          {placeholder + (isTyping ? "|" : "")}
+      </Markdown>
     </span>
   );
 }

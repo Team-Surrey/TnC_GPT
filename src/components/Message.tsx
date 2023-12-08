@@ -1,9 +1,9 @@
 import { MessageAuthor } from "@/types/enums";
 import SlowResponse from "./SlowResponse";
 
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import style from './styles/markdown.module.css';
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import style from "./styles/markdown.module.css";
 
 interface Props {
   message: Partial<Message>;
@@ -11,7 +11,7 @@ interface Props {
   slow?: boolean;
 }
 
-export default function Message({ message, loading, slow=false }: Props) {
+export default function Message({ message, loading, slow = false }: Props) {
   return (
     <div
       className={
@@ -23,15 +23,16 @@ export default function Message({ message, loading, slow=false }: Props) {
         {message.author == MessageAuthor.user ? "🧒" : "🤖"}
       </h1>
       <p className="m-auto break-words overflow-hidden break-all">
-        
         {loading ? (
           <span className="animate-pulse">Thinking...</span>
         ) : message.author == MessageAuthor.user ? (
           message.content
+        ) : slow ? (
+          <SlowResponse speed={8} text={message.content!} />
         ) : (
-          slow ? <SlowResponse speed={8} text={message.content!} /> : 
-          <span>{message.content}</span>
-          
+          <Markdown remarkPlugins={[remarkGfm]} className={style.reactMarkDown}>
+            {message.content}
+          </Markdown>
         )}
       </p>
     </div>
