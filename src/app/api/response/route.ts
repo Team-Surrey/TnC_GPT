@@ -28,25 +28,8 @@ async function openAiPredict(prompt: string) {
   const credObj = JSON.parse(cred);
 
 
-  const splitter = new CharacterTextSplitter({
-    separator: " ",
-    chunkSize: 1000,
-    chunkOverlap: 20,
-  });
-    const loader = new ApifyDatasetLoader( "IthgZdVXyQvgoj6lR", {
-      datasetMappingFunction: (item) => 
-        new Document({
-          pageContent: (item.text || "") as string,
-          metadata: {
-            url: item.url,
-          },
-        }),
-    })
-    const docs = await splitter.splitDocuments(await loader.load());
-    let vectorStore = await HNSWLib.fromDocuments(docs, new GoogleVertexAIEmbeddings());
-    console.log(vectorStore)
-    const chain = RetrievalQAChain.fromLLM(
-      new GoogleVertexAI({
+  
+    const model = new GoogleVertexAI({
         authOptions: {
           credentials: credObj,
         },
@@ -54,13 +37,7 @@ async function openAiPredict(prompt: string) {
         topP: 0.95,
         topK: 40,
         model: "text-bison@002",
-      }),
-      vectorStore.asRetriever(4),
-      {
-        returnSourceDocuments: true,
-      },
-    );
-
+    })
     const temp2 = `
     Summarize the terms and conditions for signing up for the company ${prompt} in the format:
     Heading of company name
@@ -73,7 +50,7 @@ async function openAiPredict(prompt: string) {
     
   `
 
-  const result = await chain.call({query: temp2});
+  const result = await model.call(temp2);
   console.log(result);
   return result;
 }

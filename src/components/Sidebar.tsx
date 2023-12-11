@@ -35,7 +35,7 @@ function Sidebar() {
 
   const handleChatOpen = (id: string) => {
     return () => {
-      router.push(`/chat/${id}`);
+      router.push(`/?id=${id}`);
     };
   };
 
@@ -57,6 +57,7 @@ function Sidebar() {
       const querySnapshot = await getDocs(q);
       let history:Chat[] = []
       querySnapshot.forEach((doc:any) => {
+
         history.push({id:doc.id,...doc.data()})
       });
       setChats(history)
@@ -95,7 +96,7 @@ function Sidebar() {
                   key={chat.id}
                   onClick={handleChatOpen(chat.id)}
                 >
-                  {chat.messages[0].content.slice(0, 17)}
+                  {chat.messages.length > 0 ? chat.messages[0].content.slice(0, 17) : "new chat"}
                 </Button>
               ))
             }
